@@ -1,14 +1,33 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class NodeManager : MonoBehaviour
 {
+    private static NodeManager _instance;
+
+    public static NodeManager Instance
+    {
+        get
+        {
+            try
+            {
+                return _instance;
+            }
+            catch (NullReferenceException ex)
+            {
+                Debug.LogError($"NodeManager.cs : {ex.Message}");
+                return null;
+            }
+        }
+    }
+
     public List<List<float>> node { get; private set; }
     public int nodeCount = 0;
-
     private void Awake()
     {
+        _instance = this;
+        
         int i = 0;
         node = new List<List<float>>();
         foreach(var pos in this.gameObject.transform.GetComponentsInChildren<Transform>())
@@ -25,13 +44,5 @@ public class NodeManager : MonoBehaviour
             i++;
         }
         nodeCount = i;
-
-        for (int k = 0; k < nodeCount; k++)
-        {
-            for (int j = 0; j < nodeCount; j++)
-            {
-                Debug.Log($"{k} -> {j} : {node[k][j]}");
-            }
-        }
     }
 }
