@@ -30,12 +30,12 @@ public class NodeManager : MonoBehaviour
         
         int i = 0;
         node = new List<List<float>>();
-        foreach(var pos in this.gameObject.transform.GetComponentsInChildren<Transform>())
+        foreach(var pos in gameObject.transform.GetComponentsInChildren<Transform>())
         {
             if (pos.gameObject.name == "map") continue;
             Debug.Log($"{i} : {pos.gameObject.name}");
             List<float> temp = new List<float>();
-            foreach (var dist in this.gameObject.transform.GetComponentsInChildren<Transform>())
+            foreach (var dist in gameObject.transform.GetComponentsInChildren<Transform>())
             {
                 if (dist.gameObject.name == "map") continue;
                 temp.Add(Vector3.Distance(pos.position, dist.position));
