@@ -5,25 +5,22 @@ using UnityEngine;
 
 public class SimulateManager : MonoBehaviour
 {
-    private List<ISimulate> _arr;
-    void Awake()
+    private Dictionary<string, ISimulate> _arr;
+    [SerializeField] private string _name;
+    void Start()
     {
-        _arr = new List<ISimulate>();
+        _arr = new Dictionary<string, ISimulate>();
         foreach (var item in gameObject.GetComponentsInChildren<ISimulate>())
-        {
-            _arr.Add(item);
-        }
+            _arr.Add(item.Name, item);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
-            for(int i = 0; i < _arr.Count; i++)
-            {
-                _arr[i].SolveProblem();
-            }
+            if (!_arr.ContainsKey(_name)) Debug.Log($"{_name}은 없는 이름입니다.");
+            else _arr[_name].SolveProblem();
         }
     }
 }

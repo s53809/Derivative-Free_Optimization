@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class SimulatedAnnealing : MonoBehaviour, ISimulate
 {
+    public string Name { get; private set; }
+
     private int[] _path;
     private int _pathSize;
     [SerializeField] private float criticalTemp = 0.2f;
@@ -25,6 +27,11 @@ public class SimulatedAnnealing : MonoBehaviour, ISimulate
         dist += list[path[path.Length - 1]][path[0]];
 
         return dist;
+    }
+
+    private void Awake()
+    {
+        Name = transform.name;
     }
     private void InputData()
     {

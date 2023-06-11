@@ -236,6 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2607ff3b6807e7e4fa33f501c60d7982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _name: SimulatedAnnealing
 --- !u!4 &167353435
 Transform:
   m_ObjectHideFlags: 0
@@ -460,6 +461,7 @@ MonoBehaviour:
   criticalTemp: 0.1
   reduceTemp: 0.999
   K: 1
+  isSimulate: 0
 --- !u!4 &578228880
 Transform:
   m_ObjectHideFlags: 0
