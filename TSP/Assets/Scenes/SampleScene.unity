@@ -461,7 +461,7 @@ MonoBehaviour:
   criticalTemp: 0.1
   reduceTemp: 0.999
   K: 1
-  isSimulate: 0
+  isSimulate: 1
 --- !u!4 &578228880
 Transform:
   m_ObjectHideFlags: 0

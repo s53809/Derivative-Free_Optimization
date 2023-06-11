@@ -130,13 +130,7 @@ public class SimulatedAnnealing : MonoBehaviour, ISimulate
             p = (float)Math.Clamp(Math.Exp((curE - newE) / (T * K)), 0f, 1f);
 
             if (p > UnityEngine.Random.Range(0f, 1f))
-            {
-                if (p < 1)
-                {
-                    Debug.Log($"{p} : º¯ÀÌ");
-                }
                 _path = newPath;
-            }
 
             NodeManager.Instance.DrawLine(_path);
             RefreshUIInfo(T, GetDistance(_path));
