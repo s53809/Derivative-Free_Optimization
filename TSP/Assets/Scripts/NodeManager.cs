@@ -5,6 +5,8 @@ using UnityEngine;
 public class NodeManager : MonoBehaviour
 {
     private static NodeManager _instance;
+    private LineRenderer _lineRenderer;
+    private Transform[] _childTransforms;
 
     public static NodeManager Instance
     {
@@ -30,12 +32,14 @@ public class NodeManager : MonoBehaviour
         
         int i = 0;
         node = new List<List<float>>();
-        foreach(var pos in gameObject.transform.GetComponentsInChildren<Transform>())
+        _childTransforms = gameObject.transform.GetComponentsInChildren<Transform>();
+        _lineRenderer = gameObject.transform.GetComponent<LineRenderer>();
+
+        foreach (var pos in _childTransforms)
         {
             if (pos.gameObject.name == "map") continue;
-            Debug.Log($"{i} : {pos.gameObject.name}");
             List<float> temp = new List<float>();
-            foreach (var dist in gameObject.transform.GetComponentsInChildren<Transform>())
+            foreach (var dist in _childTransforms)
             {
                 if (dist.gameObject.name == "map") continue;
                 temp.Add(Vector3.Distance(pos.position, dist.position));
@@ -44,5 +48,15 @@ public class NodeManager : MonoBehaviour
             i++;
         }
         nodeCount = i;
+    }
+
+    public void DrawLine(int[] arr)
+    {
+        _lineRenderer.positionCount = arr.Length + 1;
+        for(int i = 0; i < arr.Length; i++)
+        {
+            _lineRenderer.SetPosition(i, _childTransforms[arr[i] + 1].position);
+        }
+        _lineRenderer.SetPosition(arr.Length, _childTransforms[arr[0] + 1].position);
     }
 }

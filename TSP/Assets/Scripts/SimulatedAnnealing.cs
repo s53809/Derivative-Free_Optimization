@@ -32,7 +32,41 @@ public class SimulatedAnnealing : MonoBehaviour, ISimulate
 
         System.Random random = new System.Random();
 
+        for (int i = 0; i < _pathSize; i++) _path[i] = i;
         _path = _path.OrderBy(x => random.Next()).ToArray();
+
+        UIManager.Instance.SetTitle("SimulatedAnnealing");
+        RefreshUIInfo();
+    }
+
+    private void RefreshUIInfo()
+    {
+        string str = "";
+        for (int i = 0; i < _path.Length; i++)
+        {
+            str += _path[i].ToString() + " ";
+        }
+        UIManager.Instance.SetInfo(str);
+    }
+
+    private void RefreshUIInfo(float T)
+    {
+        string str = $"Temperature : {T}\n";
+        for (int i = 0; i < _path.Length; i++)
+        {
+            str += _path[i].ToString() + " ";
+        }
+        UIManager.Instance.SetInfo(str);
+    }
+
+    private void RefreshUIInfo(float T, float result)
+    {
+        string str = $"Distance : {result}\nTemperature : {T}\n";
+        for (int i = 0; i < _path.Length; i++)
+        {
+            str += _path[i].ToString() + " ";
+        }
+        UIManager.Instance.SetInfo(str);
     }
     private void SA()
     {
@@ -40,20 +74,21 @@ public class SimulatedAnnealing : MonoBehaviour, ISimulate
         float curE = 0; //현재 상태 에너지
         float newE = 0; //새로운 상태 에너지
         float p = 0; //확률
-        while(T > criticalTemp)
+        while (T > criticalTemp)
         {
             curE = GetDistance(_path);
-            System.Random random = new System.Random();
-            int[] newPath = _path.OrderBy(x => random.Next()).ToArray();
+            int[] newPath = new int[_pathSize];
+            Array.Copy(_path, newPath, _pathSize);
+            Swap(newPath, UnityEngine.Random.Range(0, _pathSize), UnityEngine.Random.Range(0, _pathSize));
             newE = GetDistance(newPath);
-            p = (float)Math.Exp((newE - curE) / (T * K));
-            Debug.Log($"{_path} : {curE}, {newPath} : {newE}, per = {p}");
+
+            p = (float)Math.Clamp(Math.Exp((curE - newE) / (T * K)), 0f, 1f);
 
             if (p > UnityEngine.Random.Range(0f, 1f))
-            {
-                Debug.Log("변화");
                 _path = newPath;
-            }
+
+            NodeManager.Instance.DrawLine(_path);
+            RefreshUIInfo(T, GetDistance(_path));
 
             T *= reduceTemp;
         }
@@ -61,6 +96,46 @@ public class SimulatedAnnealing : MonoBehaviour, ISimulate
     public void SolveProblem()
     {
         InputData();
-        SA();
+        StartCoroutine(SA_Simulate());
+    }
+    private void Swap(int[] arr, int a, int b)
+    {
+        int temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
+    }
+
+    IEnumerator SA_Simulate()
+    {
+        float T = 1; //온도
+        float curE = 0; //현재 상태 에너지
+        float newE = 0; //새로운 상태 에너지
+        float p = 0; //확률
+        while (T > criticalTemp)
+        {
+            curE = GetDistance(_path);
+            int[] newPath = new int[_pathSize];
+            Array.Copy(_path, newPath, _pathSize);
+            Swap(newPath, UnityEngine.Random.Range(0, _pathSize), UnityEngine.Random.Range(0, _pathSize));
+            newE = GetDistance(newPath);
+
+            p = (float)Math.Clamp(Math.Exp((curE - newE) / (T * K)), 0f, 1f);
+
+            if (p > UnityEngine.Random.Range(0f, 1f))
+            {
+                if (p < 1)
+                {
+                    Debug.Log($"{p} : 변이");
+                }
+                _path = newPath;
+            }
+
+            NodeManager.Instance.DrawLine(_path);
+            RefreshUIInfo(T, GetDistance(_path));
+
+            T *= reduceTemp;
+            yield return new WaitForSeconds(0.005f);
+        }
+        yield return null;
     }
 }
