@@ -11,6 +11,7 @@ public class SimulatedAnnealing : MonoBehaviour, ISimulate
     [SerializeField] private float criticalTemp = 0.2f;
     [SerializeField] private float reduceTemp = 0.995f;
     [SerializeField] private float K = 1; // º¼Ã÷¸¸ »ó¼ö
+    [SerializeField] private bool isSimulate = false;
     private float GetDistance(int[] path)
     {
         List<List<float>> list = NodeManager.Instance.node;
@@ -78,25 +79,25 @@ public class SimulatedAnnealing : MonoBehaviour, ISimulate
         {
             curE = GetDistance(_path);
             int[] newPath = new int[_pathSize];
-            Array.Copy(_path, newPath, _pathSize);
-            Swap(newPath, UnityEngine.Random.Range(0, _pathSize), UnityEngine.Random.Range(0, _pathSize));
+            Array.Copy(_path, newPath, _pathSize); // Deep Copy
+            Swap(newPath, UnityEngine.Random.Range(0, _pathSize),
+                UnityEngine.Random.Range(0, _pathSize));
             newE = GetDistance(newPath);
-
             p = (float)Math.Clamp(Math.Exp((curE - newE) / (T * K)), 0f, 1f);
 
             if (p > UnityEngine.Random.Range(0f, 1f))
                 _path = newPath;
 
-            NodeManager.Instance.DrawLine(_path);
-            RefreshUIInfo(T, GetDistance(_path));
-
             T *= reduceTemp;
         }
+        NodeManager.Instance.DrawLine(_path);
+        RefreshUIInfo(T, GetDistance(_path));
     }
     public void SolveProblem()
     {
         InputData();
-        StartCoroutine(SA_Simulate());
+        if (isSimulate) StartCoroutine(SA_Simulate());
+        else SA();
     }
     private void Swap(int[] arr, int a, int b)
     {
