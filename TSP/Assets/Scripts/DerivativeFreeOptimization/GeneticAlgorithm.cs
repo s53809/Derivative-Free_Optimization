@@ -31,7 +31,6 @@ public class GeneticAlgorithm : MonoBehaviour, ISimulate
             {
                 str += arr[i][j].ToString() + " ";
             }
-            Debug.Log(str);
         }
     }
 

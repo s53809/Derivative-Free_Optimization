@@ -20,16 +20,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private TextMeshProUGUI _titleText;
-    private TextMeshProUGUI _descriptionText;
+    private TMP_Text _titleText;
+    private TMP_Text _descriptionText;
+    private TMP_Text _debugLog;
 
     private void Awake()
     {
         if (_instance != null) Destroy(this.gameObject);
         else _instance = this;
 
-        _titleText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        _descriptionText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        _titleText = transform.GetChild(0).GetComponent<TMP_Text>();
+        _descriptionText = transform.GetChild(1).GetComponent<TMP_Text>();
+        _debugLog = transform.GetChild(2).GetChild(1).GetComponent<TMP_Text>();
     }
 
     public void SetTitle(string title)
@@ -40,5 +42,10 @@ public class UIManager : MonoBehaviour
     public void SetInfo(string info)
     {
         _descriptionText.text = info;
+    }
+
+    public void SetDebug(string text)
+    {
+        _debugLog.text = text;
     }
 }
