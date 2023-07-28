@@ -146,9 +146,7 @@ public class GeneticAlgorithm : MonoBehaviour, ISimulate
     {
         InputData();
         for(int i = 0; i < _numberOfIterations; i++)
-        {
             Solve();
-        }
         Show();
     }
 

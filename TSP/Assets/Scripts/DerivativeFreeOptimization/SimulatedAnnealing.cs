@@ -82,8 +82,10 @@ public class SimulatedAnnealing : MonoBehaviour, ISimulate
         float curE = 0; //현재 상태 에너지
         float newE = 0; //새로운 상태 에너지
         float p = 0; //확률
+        int countGetsu = 0;
         while (T > criticalTemp)
         {
+            countGetsu++;
             curE = GetDistance(_path);
             int[] newPath = new int[_pathSize];
             Array.Copy(_path, newPath, _pathSize); // Deep Copy
@@ -97,6 +99,7 @@ public class SimulatedAnnealing : MonoBehaviour, ISimulate
 
             T *= reduceTemp;
         }
+        Debug.Log(countGetsu);
         NodeManager.Instance.DrawLine(_path);
         RefreshUIInfo(T, GetDistance(_path));
     }

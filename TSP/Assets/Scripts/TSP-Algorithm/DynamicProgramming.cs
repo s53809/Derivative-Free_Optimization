@@ -28,7 +28,7 @@ public class DynamicProgramming : MonoBehaviour, ISimulate
         name = transform.name;
     }
 
-    private float DFS(int pos, int state, int index)
+    private float DP(int pos, int state, int index)
     {
         if (_node[pos][0] != 0 && state == _ansState) { return _node[pos][0]; }
         else if (_node[pos][0] == 0 && state == _ansState) return 1e9f;
@@ -39,7 +39,7 @@ public class DynamicProgramming : MonoBehaviour, ISimulate
         {
             if (_node[pos][i] != 0 && (state & (1 << i)) == 0)
             {
-                float result = DFS(i, state | (1 << i), index + 1);
+                float result = DP(i, state | (1 << i), index + 1);
                 if (_dp[pos][state].dist > _node[pos][i] + result)
                 {
                     _dp[pos][state].dist = _node[pos][i] + result;
@@ -84,7 +84,7 @@ public class DynamicProgramming : MonoBehaviour, ISimulate
 
     private void Solve()
     {
-        float ans = DFS(0, 1, 0);
+        float ans = DP(0, 1, 0);
 
         int[] path = new int[N];
         pair cur = _dp[0][1];
