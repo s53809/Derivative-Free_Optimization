@@ -46,6 +46,7 @@ public class UIManager : MonoBehaviour
 
     public void SetDebug(string text)
     {
-        _debugLog.text = text;
+        Debug.Log("count");
+        _debugLog.text += text;
     }
 }

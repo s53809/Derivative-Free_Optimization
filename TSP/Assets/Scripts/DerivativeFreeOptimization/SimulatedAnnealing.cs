@@ -75,6 +75,8 @@ public class SimulatedAnnealing : MonoBehaviour, ISimulate
             str += _path[i].ToString() + " ";
         }
         UIManager.Instance.SetInfo(str);
+        Debug.Log("count");
+        UIManager.Instance.SetDebug($"{result}\n");
     }
     private void SA()
     {
@@ -99,7 +101,6 @@ public class SimulatedAnnealing : MonoBehaviour, ISimulate
 
             T *= reduceTemp;
         }
-        Debug.Log(countGetsu);
         NodeManager.Instance.DrawLine(_path);
         RefreshUIInfo(T, GetDistance(_path));
     }

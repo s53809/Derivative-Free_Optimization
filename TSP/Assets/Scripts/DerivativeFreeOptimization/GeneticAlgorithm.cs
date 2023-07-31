@@ -35,19 +35,11 @@ public class GeneticAlgorithm : MonoBehaviour, ISimulate
         }
         str += "\n";
 
+        str += $"Distance : {GetDistance(path)}\n";
+
         UIManager.Instance.SetInfo(str);
 
-        str = "childInfo\n";
-
-        for(int i = 0; i < arr.Count; i++)
-        {
-            for(int j = 0; j < arr[i].Length; j++)
-            {
-                str += $"{arr[i][j]} ";
-            }
-            str += "\n";
-        }
-        UIManager.Instance.SetDebug(str);
+        UIManager.Instance.SetDebug($"{GetDistance(path)}\n");
     }
 
     private float GetDistance(int[] path)
